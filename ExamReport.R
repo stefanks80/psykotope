@@ -1,6 +1,6 @@
 # GENERAL OPTIONS
 rm(list = ls())
-options(max.print = 200, scipen = 20)
+options(max.print = 400, scipen = 20)
 
 # ------------------------------------------------------------------------------
 # Load functions first!
