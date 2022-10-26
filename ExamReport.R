@@ -6,13 +6,13 @@ options(max.print = 200, scipen = 20)
 # Load functions first!
 # ------------------------------------------------------------------------------
 
-wdPath <- chooseFileDirDialogue(setPath=TRUE)
+wd_path <- choose_file_dir_dialogue(setPath = TRUE)
 
-dirContent <- dir(wdPath, recursive=TRUE)
+dir_content <- dir(wd_path, recursive = TRUE)
 
-examDatL <- LoadExamData(wdPath)
+exam_data <- LoadExamData(wd_path)
 
-examDatPrep <- CombineAndFill(examDatL) 
+exam_data_statistikk <- CombineAndFill(exam_data) 
 
 # ------------------------------------------------------------------------------
 # Prepare data for plotting
@@ -23,4 +23,3 @@ examDatPrep <- CombineAndFill(examDatL)
 # Plot MR
 
 # Plot Essay
-
