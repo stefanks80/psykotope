@@ -24,6 +24,7 @@ choose_file_dir_dialogue <- function(set_path = FALSE) {
 
 read_statistikk <- function(exam_path) {
   # Loads and formats exam data from the examination system
+  # Returns a list of objects for further use in the analyses
 
   spmtekst <- read.table( # Reads questions-texts
     paste(exam_path, "/statistikk_spmtekst.txt", sep = ""),
@@ -33,14 +34,14 @@ read_statistikk <- function(exam_path) {
 
   names(spmtekst) <- c("spmid", "tekst")
 
-  spm <- read.table( # Reads question infos, response alternatives, correct coding etc.
+  spm <- read.table( # Reads question infos etc.
     paste(exam_path, "/statistikk_spm.txt", sep = ""),
     sep = "\t",
-    fileEncoding = "UTF-8",
-    encoding = "ISO-8859-1", as.is = TRUE, quote = "")
+    fileEncoding = "UTF-8", encoding = "ISO-8859-1",
+    as.is = TRUE, quote = "")
 
   names(spm) <- c(
-    "oppgave"
+    "oppgave",
     "blokk",
     "spmnr",
     "spmid",
@@ -66,7 +67,7 @@ read_statistikk <- function(exam_path) {
     encoding = "ISO-8859-1",
     as.is = TRUE,
     quote = "")
-    
+
   names(svar) <- c(
     "kandnr",
     "studid",
@@ -78,25 +79,34 @@ read_statistikk <- function(exam_path) {
     "altnr",
     "opsjnr")
 
-  spm[spm$korrekt == 'true','korsymbol'] <- '*'
-  spm[spm$korrekt == 'false','korsymbol'] <- ' '
+  spm[spm$korrekt == "true", "korsymbol"] <- "*"
+  spm[spm$korrekt == "false", "korsymbol"] <- " "
 
-  srtspm <- spm[order(spm$oppgave,spm$blokk,spm$spmnr,spm$altnr,spm$opsjnr),]
-  spmseq <- unique(srtspm[,c('oppgave','blokk','spmnr','spmid','type')])
-  spmseq$kortform <- gsub('([^_]+)_([^_]+)_([^_]+)_([^_]+)','\\2',spmseq$oppgave)
-  spmseq[,"idfactor"] <- factor(spmseq$spmid)
-  fagseq <- unique(srtspm[,c('fag','spmid')])
-  fagseq[,"idfactor"] <- factor(fagseq$spmid)
+  srtspm <- spm[
+    order(spm$oppgave, spm$blokk, spm$spmnr, spm$altnr, spm$opsjnr),
+    ]
 
-  oo <- unique(spm[,c('oppgave','spmid')])
+  spmseq <- unique(srtspm[, c("oppgave", "blokk", "spmnr", "spmid", "type")])
+
+  spmseq$kortform <- gsub(
+    "([^_]+)_([^_]+)_([^_]+)_([^_]+)", "\\2", 
+    spmseq$oppgave)
+
+  spmseq[, "idfactor"] <- factor(spmseq$spmid)
+
+  fagseq <- unique(srtspm[, c("fag", "spmid")])
+
+  fagseq[, "idfactor"] <- factor(fagseq$spmid)
+
+  oo <- unique(spm[, c("oppgave", "spmid")])
   oppg <- sort(unique(oo$oppgave))
 
-  ff <- unique(spm[,c('fag','spmid')])
+  ff <- unique(spm[, c("fag", "spmid")])
   fag <- sort(unique(ff$fag))
 
-  kand <- unique(svar[,c('studid', 'kandnr')])
+  kand <- unique(svar[,c("studid", "kandnr")])
 
-  j <- unique(svar[,c('studid','spmid','sensor','kar')])
+  j <- unique(svar[,c("studid", "spmid", "sensor", "kar")])
   jj <- aggregate(x=j[,c('studid','spmid','kar')], by=list(j$studid, j$spmid), mean)
   snittkar <- merge(merge(jj, oo, by=c('spmid','spmid')), ff, by=c('spmid','spmid'))
 

@@ -6,7 +6,7 @@ options(max.print = 400, scipen = 20)
 # Load functions first!
 # ------------------------------------------------------------------------------
 
-wd_path <- choose_file_dir_dialogue(setPath = TRUE)
+wd_path <- choose_file_dir_dialogue(set_path = TRUE)
 
 dir_content <- dir(wd_path, recursive = TRUE)
 
