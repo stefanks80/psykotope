@@ -10,17 +10,18 @@
 choose_file_dir_dialogue <- function(set_path = FALSE) {
   tkmessageBox(message = "Choose raw data directory")
   work_dir <- tk_choose.dir()
+  for_control <- length(dir(work_dir, "^statistik.*.txt$")) == 3
+
+  if (for_control == TRUE) 
+    cat("\n All relevant files found \n")
+
+  if (for_control == FALSE)
+    cat("\n Check folder, no statistikk files found! \n")
+
   if (set_path == TRUE) setwd(work_dir)
   return(work_dir)
 }
 
-# ------------------------------------------------------------------------------
-#
-#
-# Functions for reading the statistics from QP OnPremise output
-#
-#
-# ------------------------------------------------------------------------------
 
 read_statistikk <- function(exam_path) {
   # Loads and formats exam data from the examination system
@@ -82,78 +83,50 @@ read_statistikk <- function(exam_path) {
   spm[spm$korrekt == "true", "korsymbol"] <- "*"
   spm[spm$korrekt == "false", "korsymbol"] <- " "
 
-  srtspm <- spm[
-    order(spm$oppgave, spm$blokk, spm$spmnr, spm$altnr, spm$opsjnr),
-    ]
+  # For ESSAY items
+  j <- unique(svar[svar$type == "ESSAY", c("studid", "kar", "spmid", "sensor")])
 
-  spmseq <- unique(srtspm[, c("oppgave", "blokk", "spmnr", "spmid", "type")])
+  max_rating_sensor <- names(sort(table(j$sensor), decreasing=TRUE))[1]
 
-  spmseq$kortform <- gsub(
-    "([^_]+)_([^_]+)_([^_]+)_([^_]+)", "\\2", 
-    spmseq$oppgave)
+  sensor_ratings <- j
+  sensor_ratings$ext_sensor <- ifelse(j$sensor %in% max_rating_sensor, 1, 2)
 
-  spmseq[, "idfactor"] <- factor(spmseq$spmid)
+  sensor_ratings <- sensor_ratings[order(
+    sensor_ratings$studid, sensor_ratings$spmid, sensor_ratings$sensor), ]
 
-  fagseq <- unique(srtspm[, c("fag", "spmid")])
-
-  fagseq[, "idfactor"] <- factor(fagseq$spmid)
-
-  oo <- unique(spm[, c("oppgave", "spmid")])
-  oppg <- sort(unique(oo$oppgave))
-
-  ff <- unique(spm[, c("fag", "spmid")])
-  fag <- sort(unique(ff$fag))
-
-  kand <- unique(svar[,c("studid", "kandnr")])
-
-  j <- unique(svar[,c("studid", "spmid", "sensor", "kar")])
-  jj <- aggregate(x=j[,c('studid','spmid','kar')], by=list(j$studid, j$spmid), mean)
-  snittkar <- merge(merge(jj, oo, by=c('spmid','spmid')), ff, by=c('spmid','spmid'))
-
-  j <- unique(svar[svar$type == 'ESSAY', c('studid','kar','spmid','sensor')])
-  
-  sensorMaxRatings <- names(sort(table(j$sensor), decreasing=TRUE))[1]
-  
-  forNewSens <- j
-  forNewSens$sensorExt <- ifelse(j$sensor %in% sensorMaxRatings, 1, 2)
-  forNewSens <- forNewSens[order(forNewSens$studid, forNewSens$spmid, forNewSens$sensor),]
-  
-  slong <- j[order(j$studid, j$spmid, j$sensor),]
+  slong <- j[order(j$studid, j$spmid, j$sensor), ]
 
   l <- dim(slong)[1]
-  ll <- dim(unique(slong[,c('studid','spmid')]))[1]
-  
+  ll <- dim(unique(slong[, c("studid", "spmid")]))[1]
 
   if (ll == l) {
-    tosensorer <- F
-    #  sensur <- slong
-    #  sensur[,"sensor2"] <- NA
-    #  sensur[,"kar2"] <- NA
+    tosensorer <- FALSE
   } else {
-    tosensorer <- T
-    s  <- slong[seq(from=1,to=l,by=2),]
-    ss <- slong[seq(from=2,to=l,by=2),]
-    
-    sensur <- merge(s,ss,by=c('studid','spmid'),suffixes=c('','2'))
-    sensorer <- unique(sensur[,c('sensor','sensor2')])
+    tosensorer <- TRUE
+    s  <- slong[seq(from = 1, to = l, by = 2), ]
+    ss <- slong[seq(from = 2, to = l, by = 2), ]
 
-    sensur2 <- reshape(forNewSens, direct="wide", idvar=c("studid", "spmid"), timevar="sensorExt", sep="")
-    
+    sensur <- merge(s, ss, by = c("studid", "spmid"), suffixes = c("", "2"))
+
+    sensur2 <- reshape(
+      sensor_ratings,
+      direct = "wide",
+      idvar = c("studid", "spmid"),
+      timevar = "ext_sensor",
+      sep = "")
+
     names(sensur2) <- gsub("1", "", names(sensur2))
-
-    sensur0 <- sensur
     sensur <- na.omit(sensur2)
-    sensur <- sensur[, c('studid','spmid', 'kar', 'sensor', 'kar2', 'sensor2')]
-
+    sensur <- sensur[, c("studid", "spmid", "kar", "sensor", "kar2", "sensor2")]
   }
-  
-  if (tosensorer == T) {
-    L <- list(spmtekst, spm, svar, sensur)
-    names(L) <- c("spmtekst", "spm", "svar", "sensur")
-    return(L)
+
+  if (tosensorer == TRUE) {
+    out_list <- list(spmtekst, spm, svar, sensur)
+    names(out_list) <- c("spmtekst", "spm", "svar", "sensur")
+    return(out_list)
   } else {
-    L <- list(spmtekst, spm, svar)
-    names(L) <- c("spmtekst", "spm", "svar")
-    return(L)
-  }	
+    out_list <- list(spmtekst, spm, svar)
+    names(out_list) <- c("spmtekst", "spm", "svar")
+    return(out_list)
+  }
 }

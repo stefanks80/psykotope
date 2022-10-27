@@ -6,13 +6,15 @@ options(max.print = 400, scipen = 20)
 # Load functions first!
 # ------------------------------------------------------------------------------
 
-wd_path <- choose_file_dir_dialogue(set_path = TRUE)
+exam_path <- choose_file_dir_dialogue(set_path = TRUE)
 
-dir_content <- dir(wd_path, recursive = TRUE)
+exam_data <- read_statistikk(exam_path)
 
-exam_data <- LoadExamData(wd_path)
+# ------------------------------------------------------------------------------
+# Prepare data: Check characters
+# ------------------------------------------------------------------------------
 
-exam_data_statistikk <- CombineAndFill(exam_data) 
+
 
 # ------------------------------------------------------------------------------
 # Prepare data for plotting
