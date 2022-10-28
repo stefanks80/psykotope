@@ -36,6 +36,7 @@ perpare_onpremise_scorelevels <- function(item_scores_qop, n_cat = 4) {
 prepare_response_data <- function(qop_data) {
     data_spm <- qop_data[["spm"]]
     data_spm <- data_spm[, c("spmid", "altnr", "korrekt", "opsjnr")]
+    
     data_svar <- qop_data[["svar"]]
 
     data_svar_list <- split(data_svar, data_svar$kandnr)
@@ -97,5 +98,17 @@ prepare_response_data <- function(qop_data) {
 
     add_responses$sel_mr <- NULL
 
+    add_responses <- add_responses[, c(
+      "spmid", "altnr", "kandnr", "type",
+      "korrekt", "response", "alt_letters")]
+
+    correct_answers <- (add_responses$korrekt %in% 1) & 
+      (add_responses$response %in% 1)
+
+    add_responses[correct_answers, ]$alt_letters <- 
+      paste0("*", add_responses[correct_answers, ]$alt_letters)
+
+    add_responses <- add_responses[!add_responses$type %in% "ESSAY", ]
+    add_responses <- unique(add_responses)
     return(add_responses)
 }

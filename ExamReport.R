@@ -12,11 +12,8 @@ source("cleaningFunctions.R")
 # Load functions first!
 # ------------------------------------------------------------------------------
 
-exam_path <- choose_file_dir_dialogue(set_path = TRUE)
-
+exam_path <- choose_file_dir_dialogue(set_path = FALSE)
 exam_data <- read_statistikk(exam_path)
-
-qop_data <- exam_data
 
 # ------------------------------------------------------------------------------
 # Prepare data: Check data
@@ -31,9 +28,10 @@ exam_data <- check_item_mismatch(exam_data)
 
 exam_item_score <- perpare_onpremise_itemscores(exam_data)
 exam_score_levels <- perpare_onpremise_scorelevels(exam_item_score)
-exam_response_data <- prepare_response_data(exam_data)
+exam_response_data <- prepare_response_data(exam_data) # Excludes Essays
 
- 
+for_item_plots <- merge(exam_response_data, exam_score_levels, all.x = TRUE)
+for_item_plots <- merge(for_item_plots, exam_item_score, all.x = TRUE)
 
 # Plot single-best-answer
 
