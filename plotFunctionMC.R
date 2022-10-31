@@ -15,7 +15,6 @@ plot_mc_mr <- function(
         "#A1D99B", "#C7E9C0"),
     out_dir = NULL
     ) {
-
         plot_title <- unique(mc_data[, item_id])
         plot_filename <- paste0(out_dir, "/item", plot_title, ".pdf")
 
@@ -56,10 +55,9 @@ plot_mc_mr <- function(
                 values = alternatives_palette
                 ) +
             scale_x_discrete("Prestasjonsnivå") +
-	        scale_y_continuous("Andel valgte alternativer",
+            scale_y_continuous("Andel valgte alternativer",
                 labels = scales::percent) +
             theme16
-    
 
         pdf(plot_filename, width=5, height=6)
             print(ggplot_mc)
