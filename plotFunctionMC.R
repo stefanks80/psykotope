@@ -1,9 +1,10 @@
-plot_mc <- function(
+plot_mc_mr <- function(
     mc_data,
     candidate_id = "kandnr",
     candidate_level = "score_level",
     candidate_level_label = "score_level_label",
     resp_choices = "alt_letters",
+    item_alternatives = NULL,
     item_id = "spmid",
     distr_palette = c(
         "#56B4E9", "#E69F00", "#F0E442",
@@ -21,7 +22,7 @@ plot_mc <- function(
         alternatives_ordered <- sort(unique(mc_data[, resp_choices]))
         alternatives_correct <- grep("\\*", alternatives_ordered, value=TRUE)
         alternatives_notchosen <- grep("\\#", alternatives_ordered, value=TRUE)
-        alternatives_wrong <- alternatives_ordered  %in% 
+        alternatives_wrong <- alternatives_ordered  %in%
             c(alternatives_correct, alternatives_notchosen)
 
         alternatives_wrong <- alternatives_ordered[!alternatives_wrong]
@@ -45,17 +46,17 @@ plot_mc <- function(
 
         ggplot_mc <- ggplot2::ggplot(mc_data,
             aes(
-                x=candidate_groups, 
+                x=candidate_groups,
                 fill=response_fact)
                 ) + 
             geom_bar(position=position_fill(), width=.5) +
             scale_fill_manual(
-                drop=FALSE, 
-                guide=guide_legend(title=NULL, reverse=TRUE),
-                values=alternatives_palette
+                drop = FALSE, 
+                guide = guide_legend(title = NULL, reverse = TRUE),
+                values = alternatives_palette
                 ) +
-            scale_x_discrete("Prestasjonsnivå") + 
-	        scale_y_continuous("Andel valgte alternativer", 
+            scale_x_discrete("Prestasjonsnivå") +
+	        scale_y_continuous("Andel valgte alternativer",
                 labels = scales::percent) +
             theme16
     

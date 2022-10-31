@@ -44,16 +44,13 @@ for_item_plots <- merge(for_item_plots, exam_item_score, all.x = TRUE)
 mc_items <- for_item_plots[for_item_plots$type %in% "MC", ]
 mc_items <- split(mc_items, mc_items$spmid)
 
-lapply(mc_items, plot_mc, out_dir = exam_path)
+lapply(mc_items, plot_mc_mr, out_dir = exam_path)
 
 # Plot MR
-mc_data <- for_item_plots[for_item_plots$spmid %in% 43304, ]
-
 mr_items <- for_item_plots[for_item_plots$type %in% "MR", ]
 mr_items <- split(mr_items, mr_items$spmid)
 
-lapply(mr_items, plot_mc, out_dir = exam_path)
-
+lapply(mr_items, plot_mc_mr, out_dir = exam_path)
 
 # Plot SEL
 
