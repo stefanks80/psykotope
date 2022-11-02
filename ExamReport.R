@@ -2,7 +2,7 @@
 ########################################################
 # Generating Exam Report 
 # Date: 22-10-31
-# 
+#
 #
 #
 ########################################################
@@ -16,16 +16,28 @@ options(max.print = 200, scipen = 20)
 getwd()
 
 # ------------------------------------------------------------------------------
-# Source Functions
+# Source Packages
 # ------------------------------------------------------------------------------
 
 source("loadPackages.R")
+
+# ------------------------------------------------------------------------------
+# Source Data Read and Prep Functions
+# ------------------------------------------------------------------------------
+
 source("fileFunctions.R")
-source("dataprepFunctions.R")
+source("prepareOnpremiseData.R")
+source("prepareOnpremiseResponses.R")
 source("cleaningFunctions.R")
+
+# ------------------------------------------------------------------------------
+# Source Plotting Functions
+# ------------------------------------------------------------------------------
+
+source("plotFunctionMC.R")
 source("plotFunctionMC.R")
 
-# Plotting functions
+# Plot theme
 source("plotThemes.R")
 
 # ------------------------------------------------------------------------------
@@ -48,23 +60,16 @@ exam_data <- check_item_mismatch(exam_data)
 
 exam_item_score <- perpare_onpremise_itemscores(exam_data)
 exam_score_levels <- perpare_onpremise_scorelevels(exam_item_score)
-exam_response_data <- prepare_response_data(exam_data) # Excludes Essays
+exam_item_correct <- prepare_onpremise_key(exam_data)
 
-# For plotting SR items
+# For plotting MC and MR items
+exam_response_data <- prepare_onpremise_mcmr(exam_data) # OnPremise Specific
 
 for_item_plots <- merge(exam_response_data, exam_score_levels, all.x = TRUE)
 for_item_plots <- merge(for_item_plots, exam_item_score, all.x = TRUE)
 
-# Plot single-best-answer
-
-mc_items <- for_item_plots[for_item_plots$type %in% "MC", ]
-mc_items <- split(mc_items, mc_items$spmid)
-
-lapply(mc_items, plot_mc_mr, out_dir = exam_path)
-
-# Plot MR
-mr_items <- for_item_plots[for_item_plots$type %in% "MR", ]
-mr_items <- split(mr_items, mr_items$spmid)
+test <- for_item_plots[for_item_plots$spmid == 43179, ]
+mc_data <- test
 
 lapply(mr_items, plot_mc_mr, out_dir = exam_path)
 

@@ -4,7 +4,7 @@ plot_mc_mr <- function(
     candidate_level = "score_level",
     candidate_level_label = "score_level_label",
     resp_choices = "alt_letters",
-    item_alternatives = NULL,
+    correct_choices = NULL,
     item_id = "spmid",
     distr_palette = c(
         "#56B4E9", "#E69F00", "#F0E442",
@@ -19,12 +19,10 @@ plot_mc_mr <- function(
         plot_filename <- paste0(out_dir, "/item", plot_title, ".pdf")
 
         alternatives_ordered <- sort(unique(mc_data[, resp_choices]))
-        alternatives_correct <- grep("\\*", alternatives_ordered, value=TRUE)
-        alternatives_notchosen <- grep("\\#", alternatives_ordered, value=TRUE)
-        alternatives_wrong <- alternatives_ordered  %in%
-            c(alternatives_correct, alternatives_notchosen)
-
-        alternatives_wrong <- alternatives_ordered[!alternatives_wrong]
+        alternatives_correct <- correct_choices
+        
+        alternatives_wrong <- !alternatives_ordered  %in% alternatives_correct
+        alternatives_wrong <- alternatives_ordered[alternatives_wrong]
 
         n_correct <- length(alternatives_correct)
         n_wrong <- length(alternatives_ordered)-n_correct
