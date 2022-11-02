@@ -65,7 +65,7 @@ plot_mc_mr <- function(
                 labels = scales::percent) +
             theme16 
 
-        pdf(plot_filename, width=5, height=6)
+        pdf(plot_filename, width = 5, height = 6)
             print(ggplot_mc)
         graphics.off()
 }

@@ -28,6 +28,7 @@ source("loadPackages.R")
 source("fileFunctions.R")
 source("prepareOnpremiseData.R")
 source("prepareOnpremiseResponses.R")
+source("prepareOnpremiseSEL.R")
 source("cleaningFunctions.R")
 
 # ------------------------------------------------------------------------------
@@ -83,9 +84,11 @@ mapply(plot_mc_mr, # Generic function
 # For plotting SEL items
 # ------------------------------------------------------------------------------
 
+for_sel_plots <- prepare_onpremise_sel(exam_data)
+for_sel_plots <- merge(for_sel_plots, exam_score_levels, all.x=TRUE)
 
-table(for_item_plots$type)
+sel_data_split <- split(for_sel_plots, for_sel_plots$spmid)
 
-exam_item_keys
+
 
 # Plot Essay
