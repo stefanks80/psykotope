@@ -42,3 +42,17 @@ prepare_onpremise_mcmr <- function(qop_data) {
   mc_mr[mc_mr$altnr >= 0, "alt_letters"] <- letters[sel_alt + 1]
   return(mc_mr)
 }
+
+prepare_onpremise_mcmr_key <- function(qop_data) {
+  for_key <- qop_data[["spm"]]
+  for_key <- for_key[for_key$type %in% c("MC", "MR"), ]
+  key_vars <- c("spmid", "altnr", "korrekt")
+  for_key <- unique(for_key[, key_vars])
+  for_key[, "alt_letters"] <- "#"
+  sel_alt <- for_key[for_key$altnr >= 0, "altnr"] 
+  for_key[for_key$altnr >= 0, "alt_letters"] <- letters[sel_alt + 1]
+  for_key$korrekt <- as.logical(for_key$korrekt)
+  out_vars <- c("spmid", "alt_letters", "korrekt")
+  out <- for_key[, out_vars]
+  return(out)
+}

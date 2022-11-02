@@ -35,7 +35,7 @@ source("cleaningFunctions.R")
 # ------------------------------------------------------------------------------
 
 source("plotFunctionMC.R")
-source("plotFunctionMC.R")
+
 
 # Plot theme
 source("plotThemes.R")
@@ -55,24 +55,37 @@ exam_data <- read_statistikk(exam_path)
 exam_data <- check_item_mismatch(exam_data)
 
 # ------------------------------------------------------------------------------
-# Prepare data for plotting
+# General dataprep for plotting
 # ------------------------------------------------------------------------------
 
 exam_item_score <- perpare_onpremise_itemscores(exam_data)
 exam_score_levels <- perpare_onpremise_scorelevels(exam_item_score)
-exam_item_correct <- prepare_onpremise_key(exam_data)
 
+# ------------------------------------------------------------------------------
 # For plotting MC and MR items
-exam_response_data <- prepare_onpremise_mcmr(exam_data) # OnPremise Specific
+# ------------------------------------------------------------------------------
 
+exam_response_data <- prepare_onpremise_mcmr(exam_data) # OnPremise Specific
 for_item_plots <- merge(exam_response_data, exam_score_levels, all.x = TRUE)
 for_item_plots <- merge(for_item_plots, exam_item_score, all.x = TRUE)
 
-test <- for_item_plots[for_item_plots$spmid == 43179, ]
-mc_data <- test
+exam_item_keys <- prepare_onpremise_mcmr_key(exam_data)
 
-lapply(mr_items, plot_mc_mr, out_dir = exam_path)
+items_to_plot <- split(for_item_plots, for_item_plots$spmid)
+items_keys <- split(exam_item_keys, exam_item_keys$spmid)
 
-# Plot SEL
+mapply(plot_mc_mr, # Generic function
+    mc_data = items_to_plot,
+    answer_key_df = items_keys,
+    MoreArgs = list(out_dir = exam_path))
+
+# ------------------------------------------------------------------------------
+# For plotting SEL items
+# ------------------------------------------------------------------------------
+
+
+table(for_item_plots$type)
+
+exam_item_keys
 
 # Plot Essay
