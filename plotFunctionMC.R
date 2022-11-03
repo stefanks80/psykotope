@@ -10,7 +10,9 @@ plot_mc_mr <- function(
     distr_palette = c(
         "#F0E442", "#56B4E9", "#E69F00",
         "#0072B2", "#D55E00", "#CC79A7",
-        "#999999"),
+        "#999999", "#cec767", "#064163",
+        "#9b7b36", "#9db6c4", "#642c02",
+        "#7c4061", "#292929"),
     corr_palette = c(
         "#238B45", "#41AB5D", "#74C476",
         "#A1D99B", "#C7E9C0"),
@@ -67,4 +69,3 @@ plot_mc_mr <- function(
             print(ggplot_mc)
         graphics.off()
 }
-
