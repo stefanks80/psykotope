@@ -1,4 +1,7 @@
 ## Required Packages
 
-library(tcltk)
-library(ggplot2)
+library(tcltk) # Dialogue window
+library(ggplot2) # Plotting
+library(textclean) # For cleaning itemtext
+library(dplR) # For cleaning itemtext for LaTeX
+

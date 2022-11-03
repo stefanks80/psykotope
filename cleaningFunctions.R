@@ -28,3 +28,31 @@ check_item_mismatch <- function(qop_data) {
 
   return(qop_data)
 }
+
+clean_itemtext <- function(qop_data){
+  text_to_clean <- qop_data[["spmtekst"]]
+  text_to_clean[, "tekst"] <- replace_html(text_to_clean[, "tekst"])
+  text_to_clean[, "tekst"] <- replace_symbol(text_to_clean[, "tekst"])
+  text_to_clean[, "tekst"] <- replace_white(text_to_clean[, "tekst"])
+  text_to_clean[, "tekst"] <- replace_non_ascii(text_to_clean[, "tekst"])
+  qop_data[["spmtekst"]] <- text_to_clean
+
+  text_to_clean <- qop_data[["spm"]]
+  clean_text <- text_to_clean$opsjtekst 
+  clean_text <- replace_html(clean_text)
+  clean_text <- replace_symbol(clean_text)
+  clean_text <- replace_white(clean_text)
+  clean_text <- replace_non_ascii(clean_text)
+  text_to_clean$opsjtekst <- clean_text
+
+  clean_text <- text_to_clean$alttekst 
+  clean_text <- replace_html(clean_text)
+  clean_text <- replace_symbol(clean_text)
+  clean_text <- replace_white(clean_text)
+  clean_text <- replace_non_ascii(clean_text)
+  text_to_clean$alttekst <- clean_text
+  qop_data[["spm"]] <- text_to_clean
+  #latexify(clean_text) # Variant 
+
+  return(qop_data)
+}

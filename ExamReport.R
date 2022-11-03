@@ -37,7 +37,6 @@ source("cleaningFunctions.R")
 
 source("plotFunctionMC.R")
 
-
 # Plot theme
 source("plotThemes.R")
 
@@ -54,6 +53,7 @@ exam_data <- read_statistikk(exam_path)
 # ------------------------------------------------------------------------------
 
 exam_data <- check_item_mismatch(exam_data)
+exam_data <- clean_itemtext(exam_data)
 
 # ------------------------------------------------------------------------------
 # General dataprep for plotting

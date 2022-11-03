@@ -2,6 +2,11 @@
 ## Setting the Environment      ##
 ##################################
 
+# Gravitee
+# https://www.usit.uio.no/prosjekter/datadeling/arbeidsomrader/integrasjonsarkitektur/dokumentasjon/veiledere/api-manager/api-manager-be-om-tilgang.html
+# 121395296
+# uiodemo.inspera.no demo bruker
+
 rm(list=ls())
 
 .libPaths()

@@ -4,7 +4,6 @@ prepare_onpremise_sel <- function(qop_data) {
     var_sel <- c("spmid", "altnr", "korrekt", "opsjnr", "opsjtekst", "alttekst")
     data_spm <- data_spm[, var_sel]
 
-    head(data_alt)
     data_svar <- qop_data[["svar"]]
     data_svar <- data_svar[data_svar$type %in% "SEL", ]
     var_sel <- c("kandnr", "spmid", "altnr", "opsjnr")
