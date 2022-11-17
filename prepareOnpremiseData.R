@@ -56,3 +56,23 @@ prepare_onpremise_mcmr_key <- function(qop_data) {
   out <- for_key[, out_vars]
   return(out)
 }
+
+prepare_onpremise_ess <- function(qop_data) {
+    ess_data <- qop_data[["sensur"]]
+    nstud <- unique(ess_data$studid)
+
+    kand_data <- qop_data[["svar"]]
+    kand_data <- kand_data[, c("kandnr", "studid")]
+    kand_data <- unique(kand_data)
+    nkand <- unique(kand_data$studid)
+
+    if (sum(!nstud %in% nkand) == 0) {
+        ess_data_out <- merge(ess_data, kand_data)
+        ess_data_out$studid <- NULL
+        if (nrow(ess_data_out) == nrow(ess_data))
+          return(ess_data_out)
+      } else {
+        print("ERROR: Check candidate ids in 'svar' and 'sensur' data")
+        return(ess_data)
+      }
+}

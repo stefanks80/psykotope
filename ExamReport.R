@@ -37,6 +37,7 @@ source("prepareOnpremiseSEL.R")
 
 source("plotFunctionMC.R")
 source("plotFunctionSEL.R")
+source("plotFunctionESS.R")
 
 # Plot theme
 source("plotThemes.R")
@@ -111,3 +112,17 @@ lapply(sel_data_split, plot_sel, out_dir = exam_path)
 # ------------------------------------------------------------------------------
 # For plotting ESSAY items
 # ------------------------------------------------------------------------------
+
+ess_data <- prepare_onpremise_ess(exam_data)
+
+ess_data <- merge(ess_data, exam_item_score, by = c("spmid", "kandnr"))
+ess_data <- merge(ess_data, exam_score_levels)
+
+
+
+
+################################################################################
+#
+# Make summary-plots for candidates, domains, raters
+#
+################################################################################
