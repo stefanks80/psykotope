@@ -16,6 +16,7 @@ plot_ess <- function(
                 scale_x_discrete("Prestasjonsgruppe") +
                 scale_y_continuous("Andel mulige poeng",
                         labels = scales::percent) +
+                coord_cartesian(ylim = c(0, 1)) +
                 theme16
 
         pdf(plot_filename, width = 5, height = 5.5)
