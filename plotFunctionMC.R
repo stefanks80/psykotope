@@ -6,16 +6,14 @@ plot_mc_mr <- function(
     answer_key_df = NULL,
     answer_key_letters = "alt_letters",
     answer_key_correct = "korrekt",
-    out_dir = NULL    
+    out_dir = NULL ,   
     distr_palette = c(
         "#F0E442", "#56B4E9", "#E69F00",
         "#0072B2", "#D55E00", "#CC79A7",
         "#999999", "#cec767", "#064163",
         "#9b7b36", "#9db6c4", "#642c02",
         "#7c4061", "#292929"),
-    corr_palette = c(
-        "#238B45", "#41AB5D", "#74C476",
-        "#A1D99B", "#C7E9C0"),
+    corr_palette = c("#238B45", "#41AB5D", "#74C476", "#A1D99B", "#C7E9C0")
     ) {
         plot_title <- unique(mc_data[, item_id])
         plot_filename <- paste0(out_dir, "/item-", plot_title, ".pdf")
