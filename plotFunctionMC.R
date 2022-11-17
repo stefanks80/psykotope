@@ -52,7 +52,7 @@ plot_mc_mr <- function(
         ggplot_mc <- ggplot2::ggplot(mc_data, aes(x = candidate_groups,
                 fill = response_fact)
                 ) + 
-            geom_bar(position=position_fill(), width=.5) +
+            geom_bar(position=position_fill(), width =.5) +
             scale_fill_manual(
                 drop = FALSE, 
                 guide = guide_legend(title = NULL, reverse = TRUE, nrow = 2),

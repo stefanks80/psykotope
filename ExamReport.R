@@ -118,8 +118,9 @@ ess_data <- prepare_onpremise_ess(exam_data)
 ess_data <- merge(ess_data, exam_item_score, by = c("spmid", "kandnr"))
 ess_data <- merge(ess_data, exam_score_levels)
 
+ess_data_split <- split(ess_data, ess_data$spmid)
 
-
+lapply(ess_data_split, plot_ess, out_dir = paste0(exam_path, "/test"))
 
 ################################################################################
 #

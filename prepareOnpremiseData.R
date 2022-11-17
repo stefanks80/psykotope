@@ -59,6 +59,12 @@ prepare_onpremise_mcmr_key <- function(qop_data) {
 
 prepare_onpremise_ess <- function(qop_data) {
     ess_data <- qop_data[["sensur"]]
+    ess_data$sens_diff <- ess_data$kar - ess_data$kar2
+    ess_data$score1 <- ess_data$kar
+    ess_data$score2 <- ess_data$kar2
+    ess_data$kar <- NULL
+    ess_data$kar2 <- NULL
+    
     nstud <- unique(ess_data$studid)
 
     kand_data <- qop_data[["svar"]]
