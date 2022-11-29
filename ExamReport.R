@@ -124,6 +124,25 @@ lapply(ess_data_split, plot_ess, out_dir = paste0(exam_path, "/test"))
 
 ################################################################################
 #
-# Make summary-plots for candidates, domains, raters
+# Make tables & CTT stats for items
 #
 ################################################################################
+
+item_tabs <- mapply(tabfunc_mc_mr, # Generic function
+    mc_tab = items_to_plot,
+    answer_key_df = items_keys)
+
+# ------------------------------------------------------------------------------
+# Make item-statistics (DISCR & DIFF)
+# ------------------------------------------------------------------------------
+
+foritem_stats <- merge(exam_score_levels, exam_item_score, all=TRUE)
+
+item_list <- split(foritem_stats, foritem_stats$spmid)
+item_list <- lapply(item_list, calc_ctt_item, item_score_max = 6)
+
+# ------------------------------------------------------------------------------
+# Make item-statistics (Kappa & Weighted Kappa)
+# ------------------------------------------------------------------------------
+
+kappa_list <- lapply(ess_data_split, kappa_calc)
