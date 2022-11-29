@@ -27,8 +27,10 @@ perpare_onpremise_scorelevels <- function(item_scores_qop, n_cat = 4) {
 
   for_group_n <- data.frame(ftable(stud_sumscore$score_level_label))
 
-  levels(stud_sumscore$score_level_label) <- paste0(
-    levels(stud_sumscore$score_level_label), "\n(N=", for_group_n$Freq, ")")
+  stud_sumscore$score_level_nlabel <- stud_sumscore$score_level_label
+
+  levels(stud_sumscore$score_level_nlabel) <- paste0(
+    levels(stud_sumscore$score_level_nlabel), "\n(N=", for_group_n$Freq, ")")
 
   return(stud_sumscore)
 }

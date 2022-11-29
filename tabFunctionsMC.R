@@ -15,13 +15,16 @@ tabfunc_mc_mr <- function(
 
         alternatives_ordered <- sort(unique(answer_alt))
         alternatives_print <- sort(unique(answer_alt))
-        alternatives_print[answer_key] <- paste0(alternatives_print[answer_key], "*")
+        
+        alternatives_print[answer_key] <-
+            paste0(alternatives_print[answer_key], "*")
 
-        mc_tab[, "alt_letters"] <- ordered(mc_tab[, "alt_letters"], 
-            levels = alternatives_ordered, 
-            labels = alternatives_print) 
+        mc_tab[, resp_choices] <- ordered(mc_tab[, resp_choices],
+            levels = alternatives_ordered,
+            labels = alternatives_print)
 
-        textab <- table(mc_tab[, "alt_letters"], mc_tab[, "score_level_label"])
+        textab <- table(mc_tab[, resp_choices], 
+            mc_tab[, candidate_level_label])
 
         return(textab)
 }

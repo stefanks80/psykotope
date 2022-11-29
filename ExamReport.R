@@ -64,6 +64,18 @@ exam_data <- check_item_mismatch(exam_data)
 exam_data <- clean_itemtext(exam_data)
 
 # ------------------------------------------------------------------------------
+# Arrange item info itemtext and answering options (OnPremise-specific)
+# ------------------------------------------------------------------------------
+
+mainitemtext <- exam_data[["spmtekst"]]
+mainitemtext <- split(mainitemtext, mainitemtext$spmid)
+mainitemtext <- lapply(mainitemtext, function(df) df[, "tekst"])
+
+itemalt_text <- prep_alttext(exam_data)
+iteminfo_label <- prep_iteminfo(exam_data)
+item_short_lab <- prep_itemabrev(exam_data)
+
+# ------------------------------------------------------------------------------
 # General dataprep for plotting
 # ------------------------------------------------------------------------------
 
@@ -130,13 +142,14 @@ lapply(ess_data_split, plot_ess, out_dir = paste0(exam_path, "/test"))
 
 item_tabs <- mapply(tabfunc_mc_mr, # Generic function
     mc_tab = items_to_plot,
-    answer_key_df = items_keys)
+    answer_key_df = items_keys,
+    MoreArgs = list(candidate_level_label = "score_level_label"))
 
 # ------------------------------------------------------------------------------
 # Make item-statistics (DISCR & DIFF)
 # ------------------------------------------------------------------------------
 
-foritem_stats <- merge(exam_score_levels, exam_item_score, all=TRUE)
+foritem_stats <- merge(exam_score_levels, exam_item_score, all = TRUE)
 
 item_list <- split(foritem_stats, foritem_stats$spmid)
 item_list <- lapply(item_list, calc_ctt_item, item_score_max = 6)
@@ -146,3 +159,22 @@ item_list <- lapply(item_list, calc_ctt_item, item_score_max = 6)
 # ------------------------------------------------------------------------------
 
 kappa_list <- lapply(ess_data_split, kappa_calc)
+
+################################################################################
+#
+# Generate filecards for MC/MR items
+#
+################################################################################
+
+lapply(names(item_tabs), 
+    generate_filecard_mc,
+    fig_path = exam_path,
+    tex_path = exam_path,
+    itemtab = item_tabs,
+    item_options_text = itemalt_text,
+    itemstem_text = mainitemtext,
+    item_label = iteminfo_label,
+    item_abrev = item_short_lab,
+    cttstats = item_list,
+    owndoc = TRUE
+ )

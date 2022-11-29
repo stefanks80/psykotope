@@ -1,7 +1,7 @@
 plot_mc_mr <- function(
     mc_data,
     item_id = "spmid",
-    candidate_level_label = "score_level_label",
+    candidate_level_label = "score_level_nlabel",
     resp_choices = "alt_letters",
     answer_key_df = NULL,
     answer_key_letters = "alt_letters",
