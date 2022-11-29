@@ -166,14 +166,14 @@ kappa_list <- lapply(ess_data_split, kappa_calc)
 #
 ################################################################################
 
-lapply(names(item_tabs), 
+lapply(names(item_tabs),
     generate_filecard_mc,
-    fig_path = exam_path,
-    tex_path = exam_path,
-    itemtab = item_tabs,
-    item_options_text = itemalt_text,
-    itemstem_text = mainitemtext,
-    item_label = iteminfo_label,
+    fig_path = exam_path, # Path to figures
+    tex_path = exam_path, # Where to write
+    itemtab = item_tabs, # Item-tabs with response freq
+    item_options_text = itemalt_text, # LIST named by itemid containing text
+    itemstem_text = mainitemtext, # LIST named by item id containing option text
+    item_label = iteminfo_label, # List 
     item_abrev = item_short_lab,
     cttstats = item_list,
     owndoc = TRUE

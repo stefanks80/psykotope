@@ -15,7 +15,7 @@ tabfunc_mc_mr <- function(
 
         alternatives_ordered <- sort(unique(answer_alt))
         alternatives_print <- sort(unique(answer_alt))
-        
+
         alternatives_print[answer_key] <-
             paste0(alternatives_print[answer_key], "*")
 
