@@ -58,8 +58,16 @@ source("itemtabFunctions.R") # Calculates basic CTT for CR and SR
 # ------------------------------------------------------------------------------
 
 source("texParts.R") # Contains Header for TeX files
-source("makeIndexcardMCMR.R") 
+source("makeIndexcardMCMR.R")
 source("makeIndexcardSEL.R")
+
+################################################################################
+#
+# Define working directory for TeX and plots
+#
+################################################################################
+
+output_dir <- "C:/temp"
 
 ################################################################################
 #
@@ -125,7 +133,7 @@ items_keys <- split(exam_item_keys, exam_item_keys$spmid)
 mapply(plot_mc_mr, # Generic function
     mc_data = items_to_plot,
     answer_key_df = items_keys,
-    MoreArgs = list(out_dir = exam_path))
+    MoreArgs = list(out_dir = output_dir))
 
 # ------------------------------------------------------------------------------
 # For plotting SEL items / This is Onpremise-specific
@@ -138,7 +146,7 @@ for_sel_plots <- merge(for_sel_plots, exam_score_levels, all.x = TRUE)
 sel_data_split <- split(for_sel_plots, for_sel_plots$spmid)
 
 # Make SEL plots
-lapply(sel_data_split, plot_sel, out_dir = exam_path) 
+lapply(sel_data_split, plot_sel, item_id = "spmid", out_dir = output_dir)
 
 # ------------------------------------------------------------------------------
 # For plotting ESSAY items
@@ -151,7 +159,7 @@ ess_data <- merge(ess_data, exam_score_levels)
 
 ess_data_split <- split(ess_data, ess_data$spmid)
 
-lapply(ess_data_split, plot_ess, out_dir = paste0(exam_path, "/test"))
+lapply(ess_data_split, plot_ess, out_dir = output_dir)
 
 ################################################################################
 #
@@ -187,8 +195,8 @@ kappa_list <- lapply(ess_data_split, kappa_calc)
 
 lapply(names(item_tabs),
     generate_indexcard_mc,
-    fig_path = exam_path, # Path to figures
-    tex_path = "C:/temp", # Where to write
+    fig_path = output_dir, # Path to figures
+    tex_path = output_dir, # Where to write
     itemtab = item_tabs, # Item-tabs with response freq
     item_options_text = itemalt_text, # LIST named by itemid containing text
     itemstem_text = mainitemtext, # LIST named by item id containing option text

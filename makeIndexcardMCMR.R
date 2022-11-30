@@ -7,9 +7,9 @@ generate_indexcard_mc <- function(
     itemtab = NULL, # List with each element beeing the item response tab
     item_label = NULL, # List with each element beeing item info
     item_abrev = NULL, # List with each element beeing item info
-    cttstats = NULL,
-    owndoc = TRUE) { # List with each element beeing the item stats
-
+    cttstats = NULL, # List with each element beeing the item stats
+    owndoc = TRUE,
+    tex_command = "pdflatex.exe") { 
         # TeX file path
         filcard_tex <- paste0(tex_path, "/indexcard", itemid, ".tex")
 
@@ -44,8 +44,9 @@ generate_indexcard_mc <- function(
 
         # Generate TeX File
         sink(filcard_tex)
-            if(owndoc == TRUE) cat(texHeader1, "\n")
-            if(owndoc == TRUE) cat(texHeader2, "\n")
+            if (owndoc == TRUE) cat(texHeader1, "\n")
+            if (owndoc == TRUE) cat(texHeader2, "\n")
+            if (owndoc == TRUE) cat("\\thispagestyle{empty}", "\n")
             cat("\\section{", item_abrev[[itemid]], "} ")
             cat("\\label{sec:", itemid, "} \n\r")
             cat("\\leftframe{")
@@ -71,4 +72,12 @@ generate_indexcard_mc <- function(
             cat(print_stat, "\n\r")
             if(owndoc == TRUE) cat("\\end{document}")
         sink()
+
+        if (owndoc == TRUE) {
+            origwd <- getwd()
+            setwd(tex_path)
+            sys_com <- paste0('"', tex_command, '" ', ' "', filcard_tex, '"')
+            system(sys_com)
+            setwd(origwd)
+        }
 }
