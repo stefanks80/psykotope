@@ -1,4 +1,4 @@
-generate_filecard_mc <- function(
+generate_indexcard_mc <- function(
     itemid = NULL, # id in the corresponding dataset
     fig_path = NULL, # Where to find figures
     tex_path = NULL, # Where to write output
@@ -11,7 +11,7 @@ generate_filecard_mc <- function(
     owndoc = TRUE) { # List with each element beeing the item stats
 
         # TeX file path
-        filcard_tex <- paste0(tex_path, "/filecard", itemid, ".tex")
+        filcard_tex <- paste0(tex_path, "/indexcard", itemid, ".tex")
 
         # Item text and options
         printtext <- itemstem_text[[itemid]]

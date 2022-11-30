@@ -48,6 +48,5 @@ kappa_calc <- function(kappa_df, score_range = 0:6){
         kappa = round(kappa_out$kappa, 2), 
         wkappa = round(kappa_out$weighted.kappa, 2)
     )
-    
     return(out)
 }

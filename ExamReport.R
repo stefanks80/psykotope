@@ -12,8 +12,6 @@
 rm(list = ls())
 options(max.print = 200, scipen = 20)
 
-getwd()
-
 # ------------------------------------------------------------------------------
 # Source Packages
 # ------------------------------------------------------------------------------
@@ -41,6 +39,27 @@ source("plotFunctionESS.R")
 
 # Plot theme
 source("plotThemes.R")
+
+# ------------------------------------------------------------------------------
+# Source Item Preparation Functions
+# ------------------------------------------------------------------------------
+
+source("itemprepFunctions.R") # 
+
+# ------------------------------------------------------------------------------
+# Source Functions for CTT Item-Descriptives
+# ------------------------------------------------------------------------------
+
+source("itemStats.R") # Calculates basic CTT for CR and SR
+source("itemtabFunctions.R") # Calculates basic CTT for CR and SR
+
+# ------------------------------------------------------------------------------
+# Source IndexCard Functions and TeX additions
+# ------------------------------------------------------------------------------
+
+source("texParts.R") # Contains Header for TeX files
+source("makeIndexcardMCMR.R") 
+source("makeIndexcardSEL.R")
 
 ################################################################################
 #
@@ -167,14 +186,14 @@ kappa_list <- lapply(ess_data_split, kappa_calc)
 ################################################################################
 
 lapply(names(item_tabs),
-    generate_filecard_mc,
+    generate_indexcard_mc,
     fig_path = exam_path, # Path to figures
-    tex_path = exam_path, # Where to write
+    tex_path = "C:/temp", # Where to write
     itemtab = item_tabs, # Item-tabs with response freq
     item_options_text = itemalt_text, # LIST named by itemid containing text
     itemstem_text = mainitemtext, # LIST named by item id containing option text
-    item_label = iteminfo_label, # List 
-    item_abrev = item_short_lab,
+    item_label = iteminfo_label, # LIST 
+    item_abrev = item_short_lab, # LIST
     cttstats = item_list,
     owndoc = TRUE
  )
